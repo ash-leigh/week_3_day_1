@@ -14,7 +14,20 @@
 -- SELECT MIN(price) FROM shows;
 -- SELECT SUM(price) FROM shows;
 -- SELECT SUM(price) FROM shows WHERE price < 20;
-SELECT name, price FROM shows WHERE price = MAX(price);
+-- SELECT name, price FROM shows WHERE price = (SELECT MAX(price) FROM shows);
+-- SELECT name, price FROM shows WHERE price = (SELECT MIN(price) FROM shows WHERE price > (SELECT MIN(price) FROM shows));
+-- SELECT name FROM users WHERE name LIKE 'N%';
+-- SELECT name FROM users WHERE name LIKE '%er%';
+-- SELECT time FROM times INNER JOIN shows ON shows.id = times.show_id WHERE shows.name = 'Edinburgh Royal Tattoo';
+-- SELECT COUNT(*) FROM shows_users INNER JOIN shows ON shows_users.show_id = shows.id WHERE shows.name = 'Shitfaced Shakespeare';
+-- SELECT users.name, COUNT(shows_users.id) FROM users INNER JOIN shows_users ON users.id = shows_users.user_id GROUP BY name;
+-- SELECT * FROM users INNER JOIN shows_users ON users.id = shows_users.user_id INNER JOIN times ON shows_users.show_id = times.show_id WHERE times.time = '17:15';
+
+
+
+
+
+
 
 
 

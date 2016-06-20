@@ -189,16 +189,43 @@ Using the SQL Database file given to you as the source of data to answer the que
 
   14. Select the name and price of the most expensive show.
 
-  
+  SELECT name, price FROM shows WHERE price = (SELECT MAX(price) FROM shows);
 
+            name          | price 
+  ------------------------+-------
+   Edinburgh Royal Tattoo | 32.99
+  (1 row)
 
 
   15. Select the name and price of the second from cheapest show.
 
+  SELECT name, price FROM shows WHERE price = (SELECT MIN(price) FROM shows WHERE price > (SELECT MIN(price) FROM shows));
+
+         name        | price 
+  -------------------+-------
+   Best of Burlesque |  7.99
+  (1 row)
+
   16. Select the names of all users whose names start with the letter "N".
+
+  SELECT name FROM users WHERE name LIKE 'N%';
+
+        name       
+  -----------------
+   Nico di Lillo
+   Natalie Simpson
+  (2 rows)
 
   17. Select the names of users whose names contain "er".
 
+  SELECT name FROM users WHERE name LIKE '%er%';
+
+        name       
+  -----------------
+   Joe Maher
+   Sam Werngren
+   Davide de Lerma
+  (3 rows)
 
 ## Section 3
 
@@ -206,8 +233,65 @@ Using the SQL Database file given to you as the source of data to answer the que
 
   18. Select the time for the Edinburgh Royal Tattoo.
 
+  SELECT time FROM times INNER JOIN shows ON shows.id = times.show_id WHERE shows.name = 'Edinburgh Royal Tattoo';
+
+   time  
+  -------
+   22:00
+  (1 row)
+
   19. Select the number of users who want to see "Shitfaced Shakespeare".
+
+  SELECT COUNT(*) FROM shows_users INNER JOIN shows ON shows_users.show_id = shows.id WHERE shows.name = 'Shitfaced Shakespeare';
+
+   count 
+  -------
+       7
+  (1 row)
+
 
   20. Select all of the user names and the count of shows they're going to see.
 
+  SELECT users.name, COUNT(shows_users.id) FROM users INNER JOIN shows_users ON users.id = shows_users.user_id GROUP BY name;
+
+         name       | count 
+  ------------------+-------
+   Chris Flint      |     4
+   Euan Blackledge  |     4
+   Joe Maher        |     5
+   Ashleigh Adams   |     4
+   Russell Williams |     6
+   Nico di Lillo    |     4
+   Megan Strachan   |     5
+   Keith Douglas    |     6
+   Sam Werngren     |     5
+   Marie Moyles     |     7
+   Iain Stewart     |     6
+   Natalie Simpson  |     8
+   Davide de Lerma  |     7
+   Jay Chetty       |     5
+   Rick Henri       |     5
+  (15 rows)
+
+
   21. SELECT all users who are going to a show at 17:15.
+
+  SELECT * FROM users INNER JOIN shows_users ON users.id = shows_users.user_id INNER JOIN times ON shows_users.show_id = times.show_id WHERE times.time = '17:15';
+
+   id |       name       | id | show_id | user_id | id | time  | show_id 
+  ----+------------------+----+---------+---------+----+-------+---------
+    1 | Rick Henri       | 17 |       3 |       1 |  3 | 17:15 |       3
+    3 | Keith Douglas    | 18 |       3 |       3 |  3 | 17:15 |       3
+    5 | Euan Blackledge  | 19 |       3 |       5 |  3 | 17:15 |       3
+    8 | Joe Maher        | 20 |       3 |       8 |  3 | 17:15 |       3
+    9 | Marie Moyles     | 21 |       3 |       9 |  3 | 17:15 |       3
+   13 | Sam Werngren     | 22 |       3 |      13 |  3 | 17:15 |       3
+   15 | Davide de Lerma  | 23 |       3 |      15 |  3 | 17:15 |       3
+   11 | Megan Strachan   | 33 |       6 |      11 |  6 | 17:15 |       6
+   12 | Russell Williams | 34 |       6 |      12 |  6 | 17:15 |       6
+   13 | Sam Werngren     | 35 |       6 |      13 |  6 | 17:15 |       6
+   10 | Iain Stewart     | 36 |       6 |      10 |  6 | 17:15 |       6
+   14 | Natalie Simpson  | 37 |       6 |      14 |  6 | 17:15 |       6
+  (12 rows)
+
+
